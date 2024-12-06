@@ -20,8 +20,8 @@
     "images",
     "pdf"
   ],
-  "homepage": "https://github.com/Automattic/node-canvas",
-  "repository": "git://github.com/Automattic/node-canvas.git",
+  "homepage": "https://github.com/tylerjdurden/node-canvas",
+  "repository": "git://github.com/tylerjdurden/node-canvas.git",
   "scripts": {
     "prebenchmark": "node-gyp build",
     "benchmark": "node benchmarks/run.js",
