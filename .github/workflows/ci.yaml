@@ -68,8 +68,7 @@ jobs:
         run: |
           brew update
           brew install python3 || : # python doesn't need to be linked
-          brew install pkg-config cairo pango libpng jpeg giflib librsvg
-          pip install setuptools
+          brew install python-setuptools pkg-config cairo pango libpng jpeg giflib librsvg
       - name: Install
         run: npm install --build-from-source
       - name: Test
