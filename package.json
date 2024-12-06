@@ -66,5 +66,6 @@
   "binary": {
     "napi_versions": [7]
   },
-  "license": "MIT"
+  "license": "MIT",
+  "stableVersion": "2.11.2"
 }
