@@ -31,7 +31,7 @@ describe('Canvas', function () {
 
   it('Prototype and ctor are well-shaped, don\'t hit asserts on accessors (GH-803)', function () {
     const c = new Canvas(10, 10)
-    assert.throws(function () { Canvas.prototype.width }, /incompatible receiver/)
+    assert.throws(function () { Canvas.prototype.width }, /invalid argument/i)
     assert(!c.hasOwnProperty('width'))
     assert('width' in c)
     assert('width' in Canvas.prototype)
@@ -88,7 +88,9 @@ describe('Canvas', function () {
       '20px "new century schoolbook", serif',
       { size: 20, unit: 'px', family: 'new century schoolbook,serif' },
       '20px "Arial bold 300"', // synthetic case with weight keyword inside family
-      { size: 20, unit: 'px', family: 'Arial bold 300', variant: 'normal' }
+      { size: 20, unit: 'px', family: 'Arial bold 300', variant: 'normal' },
+      `50px "Helvetica 'Neue'", "foo \\"bar\\" baz" , "Someone's weird \\'edge\\' case", sans-serif`,
+      { size: 50, unit: 'px', family: `Helvetica 'Neue',foo "bar" baz,Someone's weird 'edge' case,sans-serif` }
     ]
 
     for (let i = 0, len = tests.length; i < len; ++i) {
@@ -163,6 +165,13 @@ describe('Canvas', function () {
     ctx.fillStyle = '#FGG'
     assert.equal('#ff0000', ctx.fillStyle)
 
+    ctx.fillStyle = '      #FCA'
+    assert.equal('#ffccaa', ctx.fillStyle)
+
+    ctx.fillStyle = '         #ffccaa'
+    assert.equal('#ffccaa', ctx.fillStyle)
+
+
     ctx.fillStyle = '#fff'
     ctx.fillStyle = 'afasdfasdf'
     assert.equal('#ffffff', ctx.fillStyle)
@@ -213,6 +222,89 @@ describe('Canvas', function () {
     ctx.fillStyle = 'rgba(124, 58, 26, 0)';
     assert.equal('rgba(124, 58, 26, 0.00)', ctx.fillStyle);
 
+    ctx.fillStyle = 'rgba( 255, 200, 90, 40%)'
+    assert.equal('rgba(255, 200, 90, 0.40)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90, 50 %)'
+    assert.equal('rgba(255, 200, 90, 0.50)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90, 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90, 10 %)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90 / 40%)'
+    assert.equal('rgba(255, 200, 90, 0.40)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90 / 0.5)'
+    assert.equal('rgba(255, 200, 90, 0.50)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90 / 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255, 200, 90 / 0.1)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255 200 90 / 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgba( 255 200 90  0.1)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb(0, 0, 0, 42.42)'
+    assert.equal('#000000', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb(255, 250, 255)';
+    assert.equal('#fffaff', ctx.fillStyle);
+
+    ctx.fillStyle = 'rgb(124, 58, 26, 0)';
+    assert.equal('rgba(124, 58, 26, 0.00)', ctx.fillStyle);
+
+    ctx.fillStyle = 'rgb( 255, 200, 90, 40%)'
+    assert.equal('rgba(255, 200, 90, 0.40)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90, 50 %)'
+    assert.equal('rgba(255, 200, 90, 0.50)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90, 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90, 10 %)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90 / 40%)'
+    assert.equal('rgba(255, 200, 90, 0.40)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90 / 0.5)'
+    assert.equal('rgba(255, 200, 90, 0.50)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90 / 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 200, 90 / 0.1)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255 200 90 / 10%)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255 200 90  0.1)'
+    assert.equal('rgba(255, 200, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = '       rgb( 255 100 90  0.1)'
+    assert.equal('rgba(255, 100, 90, 0.10)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb(124.00, 58, 26, 0)';
+    assert.equal('rgba(124, 58, 26, 0.00)', ctx.fillStyle);
+
+    ctx.fillStyle = 'rgb( 255, 200.09, 90, 40%)'
+    assert.equal('rgba(255, 201, 90, 0.40)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255.00, 199.03, 90, 50 %)'
+    assert.equal('rgba(255, 200, 90, 0.50)', ctx.fillStyle)
+
+    ctx.fillStyle = 'rgb( 255, 300.09, 90, 40%)'
+    assert.equal('rgba(255, 255, 90, 0.40)', ctx.fillStyle)
     // hsl / hsla tests
 
     ctx.fillStyle = 'hsl(0, 0%, 0%)'
@@ -235,6 +327,9 @@ describe('Canvas', function () {
 
     ctx.fillStyle = 'hsl(237, 76%, 25%)'
     assert.equal('#0f1470', ctx.fillStyle)
+
+    ctx.fillStyle = '      hsl(0, 150%, 150%)'
+    assert.equal('#ffffff', ctx.fillStyle)
 
     ctx.fillStyle = 'hsl(240, 73%, 25%)'
     assert.equal('#11116e', ctx.fillStyle)
@@ -596,6 +691,11 @@ describe('Canvas', function () {
 
     it('Canvas#toBuffer("image/png", {compressionLevel: 5})', function () {
       const buf = createCanvas(200, 200).toBuffer('image/png', { compressionLevel: 5 })
+      assert.equal('PNG', buf.slice(1, 4).toString())
+    })
+
+    it('Canvas#toBuffer("image/png", {filters: PNG_ALL_FILTERS})', function () {
+      const buf = createCanvas(200, 200).toBuffer('image/png', { filters: Canvas.PNG_ALL_FILTERS })
       assert.equal('PNG', buf.slice(1, 4).toString())
     })
 
@@ -1410,6 +1510,14 @@ describe('Canvas', function () {
     assert.strictEqual(pattern.toString(), '[object CanvasPattern]')
   })
 
+  it('CanvasPattern has class string of `CanvasPattern`', async function () {
+    const img = await loadImage(path.join(__dirname, '/fixtures/checkers.png'));
+    const canvas = createCanvas(20, 20)
+    const ctx = canvas.getContext('2d')
+    const pattern = ctx.createPattern(img)
+    assert.strictEqual(Object.prototype.toString.call(pattern), '[object CanvasPattern]')
+  })
+
   it('Context2d#createLinearGradient()', function () {
     const canvas = createCanvas(20, 1)
     const ctx = canvas.getContext('2d')
@@ -1439,12 +1547,24 @@ describe('Canvas', function () {
     assert.equal(0, imageData.data[i + 2])
     assert.equal(255, imageData.data[i + 3])
   })
+  it('Canvas has class string of `HTMLCanvasElement`', function () {
+    const canvas = createCanvas(20, 1)
+
+    assert.strictEqual(Object.prototype.toString.call(canvas), '[object HTMLCanvasElement]')
+  })
 
   it('CanvasGradient stringifies as [object CanvasGradient]', function () {
     const canvas = createCanvas(20, 1)
     const ctx = canvas.getContext('2d')
     const gradient = ctx.createLinearGradient(1, 1, 19, 1)
     assert.strictEqual(gradient.toString(), '[object CanvasGradient]')
+  })
+
+  it('CanvasGradient has class string of `CanvasGradient`', function () {
+    const canvas = createCanvas(20, 1)
+    const ctx = canvas.getContext('2d')
+    const gradient = ctx.createLinearGradient(1, 1, 19, 1)
+    assert.strictEqual(Object.prototype.toString.call(gradient), '[object CanvasGradient]')
   })
 
   describe('Context2d#putImageData()', function () {
@@ -1943,7 +2063,7 @@ describe('Canvas', function () {
         ctx[k] = v
         ctx.restore()
         assert.strictEqual(ctx[k], old)
-  
+
         // save() doesn't modify the value:
         ctx[k] = v
         old = ctx[k]
