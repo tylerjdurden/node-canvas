@@ -6,8 +6,8 @@
 #    for git@github.com:Automattic/node-canvas.git).
 # 4. Create a draft release manually using the GitHub UI for the new tag.
 # 5. Switch to the prebuilds branch.
-# 6. Set the `jobs.*.strategy.matrix.node` arrays to the set of Node.js versions
-#    to build for.
+# 6. If necessary, update `jobs.*.strategy.matrix.node` to change the node
+#    version used to build
 # 7. Set the `jobs.*.strategy.matrix.canvas_tag` arrays to the set of Canvas
 #    tags to build. (Usually this is a single tag, but can be an array when a
 #    new version of Node.js is released and older versions of Canvas need to be
@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [21]
-        canvas_tag: ["v3.0.0-rc2"] # e.g. "v2.6.1"
+        canvas_tag: ["v3.0.0-rc3"] # e.g. "v2.6.1"
     name: ${{ matrix.canvas_tag }}, Node.js ${{ matrix.node }}, Linux
     runs-on: ubuntu-latest
     container:
@@ -143,9 +143,12 @@ jobs:
       fail-fast: false
       matrix:
         node: [21]
-        canvas_tag: ["v3.0.0-rc2"] # e.g. "v2.6.1"
-    name: ${{ matrix.canvas_tag}}, Node.js ${{ matrix.node }}, macOS
-    runs-on: macos-12 # macos-14+ is M1
+        canvas_tag: ["v3.0.0-rc3"] # e.g. "v2.6.1"
+        os:
+          - runner: macos-15-large
+          - runner: macos-15
+    name: ${{ matrix.canvas_tag}}, Node.js ${{ matrix.node }}, macOS ${{ matrix.os.arch }}
+    runs-on: ${{ matrix.os.runner }}
     env:
       CANVAS_VERSION_TO_BUILD: ${{ matrix.canvas_tag }}
     steps:
@@ -176,6 +179,12 @@ jobs:
         run: |
           brew uninstall --force --ignore-dependencies cairo pango librsvg giflib harfbuzz
           npm test
+
+      - name: Sign the executable
+        run: |
+          for file in $(ls build/Release);
+          do codesign --deep --force --sign - build/Release/$file;
+          done;
 
       - name: Make bundle
         id: make_bundle
@@ -216,7 +225,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [21]
-        canvas_tag: ["v3.0.0-rc2"] # e.g. "v2.6.1"
+        canvas_tag: ["v3.0.0-rc3"] # e.g. "v2.6.1"
     name: ${{ matrix.canvas_tag}}, Node.js ${{ matrix.node }}, Windows
     runs-on: windows-2019
     env:
