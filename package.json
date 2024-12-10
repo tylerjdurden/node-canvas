@@ -1,5 +1,5 @@
 {
-  "name": "canvas",
+  "name": "@tylerjdurden/canvas",
   "description": "Canvas graphics API backed by Cairo",
   "version": "2.11.2-arm",
   "author": "TJ Holowaychuk <tj@learnboost.com>",
