@@ -1,7 +1,7 @@
 {
   "name": "canvas",
-  "description": "Canvas graphics API backed by Cairo with modifications to support ARM64 prebuilds for v2.11.2",
-  "version": "2.11.2-arm",
+  "description": "Canvas graphics API backed by Cairo with modifications to support ARM64 prebuilds for v2.11.x",
+  "version": "2.11.3",
   "author": "TJ Holowaychuk <tj@learnboost.com>",
   "main": "index.js",
   "browser": "browser.js",
@@ -69,5 +69,5 @@
     ]
   },
   "license": "MIT",
-  "stableVersion": "2.11.2"
+  "stableVersion": "2.11.3"
 }
