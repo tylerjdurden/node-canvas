@@ -7,7 +7,7 @@ FILENAME=$(
     const libc = process.env.LIBC || process.env.npm_config_libc ||
       (detectLibc.isNonGlibcLinuxSync() && detectLibc.familySync()) || ''
     const tagName = p.env.UPLOAD_TO || p.env.CANVAS_VERSION_TO_BUILD;
-    console.log('canvas-tylerjdurden-' + tagName + '-napi-v7-' + p.platform + libc + '-' + p.arch);
+    console.log('canvas-' + tagName + '-napi-v7-' + p.platform + libc + '-' + p.arch);
   "
 ).tar.gz;
 
