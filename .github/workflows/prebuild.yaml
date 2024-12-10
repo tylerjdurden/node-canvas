@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16]
-        canvas_tag: ["v2.11.2"] # e.g. "v2.6.1"
+        node: [16.19.0]
+        canvas_tag: ["v2.11.2-arm"] # e.g. "v2.6.1"
     name: ${{ matrix.canvas_tag }}, Node.js ${{ matrix.node }}, Linux
     runs-on: ubuntu-latest
     if: contains(fromJson(inputs.os), 'ubuntu-latest')
@@ -152,11 +152,12 @@ jobs:
               name: assetName,
               data: fs.readFileSync(assetName)
             });
+
   macOSarm:
     strategy:
       fail-fast: false
       matrix:
-        node: [16]
+        node: [16.19.0]
         canvas_tag: ["v2.11.2-arm"] # e.g. "v2.6.1"
     name: ${{ matrix.canvas_tag}}, Node.js ${{ matrix.node }}, macOSarm64
     runs-on: macos-latest # macos-14+ is M1
@@ -231,8 +232,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16]
-        canvas_tag: ["v2.11.2"] # e.g. "v2.6.1"
+        node: [16.19.0]
+        canvas_tag: ["v2.11.2-arm"] # e.g. "v2.6.1"
     name: ${{ matrix.canvas_tag}}, Node.js ${{ matrix.node }}, macOS
     runs-on: macos-13 # macos-14+ is M1
     if: contains(fromJson(inputs.os), 'macos-13')
