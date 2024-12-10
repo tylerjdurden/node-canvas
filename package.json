@@ -1,6 +1,6 @@
 {
-  "name": "@tylerjdurden/canvas",
-  "description": "Canvas graphics API backed by Cairo",
+  "name": "canvas-tylerjdurden",
+  "description": "Canvas graphics API backed by Cairo with modifications to support ARM64 prebuilds for v2.11.2",
   "version": "2.11.2-arm",
   "author": "TJ Holowaychuk <tj@learnboost.com>",
   "main": "index.js",
@@ -64,7 +64,9 @@
     "node": ">=16.19.0"
   },
   "binary": {
-    "napi_versions": [7]
+    "napi_versions": [
+      7
+    ]
   },
   "license": "MIT",
   "stableVersion": "2.11.2"
