@@ -1,5 +1,5 @@
 {
-  "name": "canvas-tylerjdurden",
+  "name": "canvas",
   "description": "Canvas graphics API backed by Cairo with modifications to support ARM64 prebuilds for v2.11.2",
   "version": "2.11.2-arm",
   "author": "TJ Holowaychuk <tj@learnboost.com>",
